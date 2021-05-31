@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useContext } from 'react';
-import { isObject, assignDeep } from './util';
+import { isType, assignDeep,variableRelation,} from './util';
 
 const initialState = {};
 const store = createContext(initialState);
@@ -13,10 +13,12 @@ const StateWrapper = ({ children }) => {
   const reducer = (state, action) => {
     let { type, value } = action;
     types.add(type);
+    let obj = {};
 
-    const obj = {};
-
-    obj[type] = isObject(state[type]) && isObject(value) ?
+    if(variableRelation(state[type],value) === 'same') throw new Error('the state shouldn\'t appear in dispatch.');
+    if(variableRelation(state[type],value) !== 'different') return state;
+    
+    obj[type] = isType(state[type]) && isType(value) ?
       { ...state[type], ...value } :
       value;
 
@@ -27,12 +29,10 @@ const StateWrapper = ({ children }) => {
 
   const ProviderVal = { state, dispatch };
 
-  detailCtrl = type => {
-    return {
-      dispatch: value => dispatch({ type, value }),
-      state: useContext(store).state[type],
-    }
-  }
+  detailCtrl = type => [
+    useContext(store).state[type],
+    value => dispatch({ type, value }),
+  ];
 
   getGlobalStore = () => useContext(store).state;
 
