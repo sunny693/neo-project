@@ -11,3 +11,5 @@ quesion：
   * useReducer更底层
   * 在useReducer中，dispatch触发，发送一个action到reducer中，reducer会将action和当前的state做对比，
     * 不想更新，可以将原state返回
+
+https://github.com/facebook/react/issues/15156#issuecomment-474590693

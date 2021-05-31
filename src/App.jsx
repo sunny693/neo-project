@@ -1,14 +1,14 @@
-import React, { useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 // import Test from './components/test';
-import {getGlobalStore,StateWrapper,types,detailCtrl} from './components/ctrlState';
+import {StateWrapper,detailCtrl} from './components/multiContext';
 import './App.css'
 
 function Grandpa() {;
   const [k,setK] = useState(1);
   return <StateWrapper>
     <Father1/>
-    <Father2/>
-    <Father3 k={k} setK={setK}/>
+    {/* <Father2/> */}
+    {/* <Father3 k={k} setK={setK}/> */}
   </StateWrapper>
 }
 
@@ -16,14 +16,14 @@ export default Grandpa;
 
 function Father1(props) {
   const  [state,dispatch]= detailCtrl('SIGN');
-
+  
   return <div onClick={() => {
     dispatch({
-      a:state?.a === undefined ? 0 :state.a +1
+     a: 111
     });
   }}>
-    {state?.a}
-    <Child1 />
+    {/* {state?.a} */}
+    {/* <Child1 /> */}
     因为有你
   </div>;
 }
