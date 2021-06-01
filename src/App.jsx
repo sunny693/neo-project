@@ -7,8 +7,8 @@ function Grandpa() {;
   const [k,setK] = useState(1);
   return <StateWrapper>
     <Father1/>
-    {/* <Father2/> */}
-    {/* <Father3 k={k} setK={setK}/> */}
+    { k !== 1 &&  <Father2/>}
+    <Father3 k={k} setK={setK}/>
   </StateWrapper>
 }
 
@@ -16,21 +16,21 @@ export default Grandpa;
 
 function Father1(props) {
   const  [state,dispatch]= detailCtrl('SIGN');
-  
+
   return <div onClick={() => {
     dispatch({
-     a: 111
+      a: state?.a ? state.a+1 : 1
     });
   }}>
-    {/* {state?.a} */}
-    {/* <Child1 /> */}
+    {state?.a}
+    <Child1 />
     因为有你
   </div>;
 }
 
 function Father2(props) {
   const [state,dispatch] = detailCtrl('SIGN2');
-
+  
   return <><div onClick={() => {
     dispatch({b:444});
   }}>

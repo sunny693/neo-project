@@ -145,10 +145,21 @@ function isEqual(...rest) {
   return variableRelation(...rest) !== 'different';
 }
 
+function compose(...rest) {
+  if (rest.length === 0) return;
+  if (rest.length === 1) return rest[0]();
+
+  const params = rest.pop();
+  const funcs = rest;
+
+  return funcs.reduce((acc, func) => func(acc), params);
+}
+
 export {
   checkType,
   isType,
   assignDeep,
   variableRelation,
   isEqual,
+  compose,
 }

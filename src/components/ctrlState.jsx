@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useContext } from 'react';
-import { isType, variableRelation,} from './util';
+import { isType, variableRelation, } from './util';
 
 const initialState = {};
 const store = createContext(initialState);
@@ -15,14 +15,14 @@ const StateWrapper = ({ children }) => {
     types.add(type);
     let obj = {};
 
-    if(variableRelation(state[type],value) === 'same') throw new Error('the state shouldn\'t appear in dispatch.');
-    if(variableRelation(state[type],value) !== 'different') return state;
-    
+    if (variableRelation(state[type], value) === 'same') throw new Error('the state shouldn\'t appear in dispatch.');
+    if (variableRelation(state[type], value) !== 'different') return state;
+
     obj[type] = isType(state[type]) && isType(value) ?
       { ...state[type], ...value } :
       value;
 
-      return {...state,...obj};
+    return { ...state, ...obj };
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
