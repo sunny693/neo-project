@@ -1,15 +1,13 @@
 import React, { createContext, useReducer, useContext } from 'react';
 import { isType, variableRelation, } from './util';
 
-const initialState = {};
-const store = createContext(initialState);
-const { Provider } = store;
-
 let types = new Set();
 let detailCtrl;
-let getGlobalStore;
 
 const StateWrapper = ({ children }) => {
+  const store = createContext();
+  const { Provider } = store;
+
   const reducer = (state, action) => {
     let { type, value } = action;
     types.add(type);
@@ -25,16 +23,14 @@ const StateWrapper = ({ children }) => {
     return { ...state, ...obj };
   };
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {});
 
   detailCtrl = type => [
     useContext(store)[type],
     value => dispatch({ type, value }),
   ];
 
-  getGlobalStore = () => useContext(store);
-
   return <Provider value={state}>{children}</Provider>;
 };
 
-export { getGlobalStore, types, StateWrapper, detailCtrl };
+export {types, StateWrapper, detailCtrl };

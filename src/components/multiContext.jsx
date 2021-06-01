@@ -1,12 +1,12 @@
 import React, { createContext, useReducer, useContext } from 'react';
 import { isType, variableRelation, compose, } from './util';
 
-const initialState = {};
 let detailCtrl;
 let types = new Set();
 let repos = {};
+
 function StateWrapper({ children }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {});
 
   function reducer(state, action) {
     let { type, value } = action;
@@ -52,4 +52,4 @@ function StateWrapper({ children }) {
   return children;
 }
 
-export { types, StateWrapper, detailCtrl };
+export { types, StateWrapper, detailCtrl, };
