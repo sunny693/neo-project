@@ -15,7 +15,7 @@ function Grandpa() {;
 export default Grandpa;
 
 function Father1(props) {
-  const  [state,dispatch]= detailCtrl('SIGN');
+  const  [state,dispatch]= detailCtrl('MULTI-SIGN');
 
   return <div onClick={() => {
     dispatch({
@@ -23,16 +23,18 @@ function Father1(props) {
     });
   }}>
     {state?.a}
-    <Child1 />
+    {/* <Child1 /> */}
     因为有你
   </div>;
 }
 
 function Father2(props) {
   const [state,dispatch] = detailCtrl('SIGN2');
-  
+
   return <><div onClick={() => {
-    dispatch({b:444});
+    dispatch({
+      b: state?.b ? state.b+1 : 1
+    });
   }}>
     {state?.b}
     {/* <Child1 /> */}
@@ -44,6 +46,7 @@ function Father2(props) {
   </>
   ;
 }
+
 function Child1(props) {
   const [state] = detailCtrl('SIGN');
   return <div>

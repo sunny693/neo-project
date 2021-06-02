@@ -155,6 +155,10 @@ function compose(...rest) {
   return funcs.reduce((acc, func) => func(acc), params);
 }
 
+function mergeMap(...rest) {
+  return new Map(rest.reduce((acc, item) => [...acc, ...item], []));
+}
+
 export {
   checkType,
   isType,
@@ -162,4 +166,5 @@ export {
   variableRelation,
   isEqual,
   compose,
+  mergeMap,
 }

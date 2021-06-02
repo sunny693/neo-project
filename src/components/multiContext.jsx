@@ -1,42 +1,63 @@
-import React, { createContext, useReducer, useContext } from 'react';
+import React, { createContext, useReducer, useContext, } from 'react';
 import { isType, variableRelation, compose, } from './util';
 
 let detailCtrl;
-let types = new Set();
-let repos = {};
+const SingleContextType = Symbol("A separate context type.");
+const repos = new Map([[SingleContextType, createContext()]]);
+const isMulti = str => str.indexOf('MULTI-') === 0;
 
 function StateWrapper({ children }) {
-  const [state, dispatch] = useReducer(reducer, {});
+  const [state, dispatch] = useReducer(reducer, { types: new Set([SingleContextType]) });
 
   function reducer(state, action) {
     let { type, value } = action;
-    let obj = {};
+    let { types } = state;
 
-    types.add(type);
+    if (types) types.add(type);
 
     if (!value) {
-      repos[type] = createContext();
+      repos.set(type, createContext());
+
       return state;
     }
+    const Relation = variableRelation(state[type], value);
+    let obj = {}
 
-    if (variableRelation(state[type], value) === 'same') throw new Error('the state shouldn\'t appear in dispatch.');
-    if (variableRelation(state[type], value) !== 'different') return state;
+    if (Relation === 'same') throw new Error('the state shouldn\'t appear in dispatch.');
+    if (Relation !== 'different') return state;
 
-    obj[type] = isType(state[type]) && isType(value) ?
-      { ...state[type], ...value } :
-      value;
+    obj[type] = isType(state[type]) && isType(value) ? { ...state[type], ...value } : value;
 
     return { ...state, ...obj };
   };
 
   detailCtrl = type => {
-    if (!types.has(type)) dispatch({ type });
+    let { types } = state;
 
-    const store = repos[type];
-    return [
-      useContext(store),
+    if (isMulti(type) && !types.has(type)) dispatch({ type });
+
+    if (isMulti(type)) return [
+      useContext(repos.get(type)),
       value => dispatch({ type, value }),
     ];
+
+    const singleState = useContext(repos.get(SingleContextType));
+
+    return [
+      singleState?.[type],
+      val => {
+        let valueObj = {};
+        valueObj[type] = val;
+
+        return dispatch({
+          type: SingleContextType,
+          value: {
+            ...SingleContextType?.[type] || {},
+            ...valueObj,
+          }
+        });
+      }
+    ]
   }
 
   function renderTmp([type, store]) {
@@ -45,11 +66,10 @@ function StateWrapper({ children }) {
     return children => <Provider value={state[type]}>{children}</Provider>
   }
 
-  if (Object.keys(repos).length > 0) return compose(
-    ...Object.entries(repos).map(repo => renderTmp(repo)),
-    children);
+  const reposArr = Array.from(repos).map(repo => renderTmp(repo));
+  if (repos.size > 0) return compose(...reposArr, children);
 
   return children;
 }
 
-export { types, StateWrapper, detailCtrl, };
+export { StateWrapper, detailCtrl, };

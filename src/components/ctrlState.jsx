@@ -1,18 +1,20 @@
 import React, { createContext, useReducer, useContext } from 'react';
 import { isType, variableRelation, } from './util';
 
-let types = new Set();
 let detailCtrl;
+let types = new Set();
 
 const StateWrapper = ({ children }) => {
   const store = createContext();
   const { Provider } = store;
 
-  const reducer = (state, action) => {
+  const [state, dispatch] = useReducer(reducer, {});
+
+  function reducer(state, action) {
     let { type, value } = action;
-    types.add(type);
     let obj = {};
 
+    types.add(type);
     if (variableRelation(state[type], value) === 'same') throw new Error('the state shouldn\'t appear in dispatch.');
     if (variableRelation(state[type], value) !== 'different') return state;
 
@@ -23,8 +25,6 @@ const StateWrapper = ({ children }) => {
     return { ...state, ...obj };
   };
 
-  const [state, dispatch] = useReducer(reducer, {});
-
   detailCtrl = type => [
     useContext(store)[type],
     value => dispatch({ type, value }),
@@ -33,4 +33,4 @@ const StateWrapper = ({ children }) => {
   return <Provider value={state}>{children}</Provider>;
 };
 
-export {types, StateWrapper, detailCtrl };
+export { types, StateWrapper, detailCtrl };
