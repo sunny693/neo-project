@@ -1,12 +1,15 @@
 import React, {  useState } from 'react'
 // import Test from './components/test';
-import {StateWrapper,detailCtrl} from './components/flowRegime';
+import {StateWrapper,ctrlState} from './components/flowRegime';
 import './App.css'
+import { compose } from './components/util';
 
 function Grandpa() {;
   const [k,setK] = useState(1);
   return <StateWrapper>
-    <Father1/>
+    {
+      forEach(1000)
+    }
     { k !== 1 &&  <Father2/>}
     <Father3 k={k} setK={setK}/>
   </StateWrapper>
@@ -14,8 +17,16 @@ function Grandpa() {;
 
 export default Grandpa;
 
-function Father1(props) {
-  const  [state,dispatch]= detailCtrl('MULTI-SIGN');
+function forEach(num){
+  let arr = [];
+
+  for(let i = 0;i< num;i++) arr.push("");
+
+  return arr.map((Item,key) => <Father1 val={key} key={key}/>)
+};
+
+function Father1({val}) {
+  const  [state,dispatch]= ctrlState(`MULTI-SIGN-${val}`);
 
   return <div onClick={() => {
     dispatch({
@@ -29,7 +40,7 @@ function Father1(props) {
 }
 
 function Father2(props) {
-  const [state,dispatch] = detailCtrl('SIGN2');
+  const [state,dispatch] = ctrlState('SIGN2');
 
   return <><div onClick={() => {
     dispatch({
@@ -48,9 +59,9 @@ function Father2(props) {
 }
 
 function Child1(props) {
-  const [state] = detailCtrl('SIGN');
+  const [state] = ctrlState('SIGN2');
   return <div>
-    {state?.a }
+    {state?.b }
   </div>
 }
 

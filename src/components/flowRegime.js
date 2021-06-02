@@ -1,7 +1,7 @@
-import { createElement, createContext, useReducer, useContext, } from 'react';
-import { isType, variableRelation, compose, } from './util';
+import { createElement, createContext, useReducer, useContext, useMemo,} from 'react';
+import { isType, variableRelation, compose,isEqual } from './util';
 
-let detailCtrl;
+let ctrlState;
 const SingleContextType = Symbol("A separate context type.");
 const repos = new Map([[SingleContextType, createContext()]]);
 const isMulti = str => str.indexOf('MULTI-') === 0;
@@ -13,7 +13,7 @@ function StateWrapper({ children }) {
     let { type, value } = action;
     let { types } = state;
 
-    if (types) types.add(type);
+    types.add(type);
 
     if (!value) {
       repos.set(type, createContext());
@@ -31,7 +31,7 @@ function StateWrapper({ children }) {
     return { ...state, ...obj };
   };
 
-  detailCtrl = type => {
+  ctrlState = type => {
     let { types } = state;
 
     if (isMulti(type) && !types.has(type)) dispatch({ type });
@@ -73,4 +73,4 @@ function StateWrapper({ children }) {
   return children;
 }
 
-export { StateWrapper, detailCtrl, };
+export { StateWrapper, ctrlState, };
