@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, } from 'react';
+import { createElement, createContext, useReducer, useContext, } from 'react';
 import { isType, variableRelation, compose, } from './util';
 
 let detailCtrl;
@@ -63,7 +63,8 @@ function StateWrapper({ children }) {
   function renderTmp([type, store]) {
     const { Provider } = store;
 
-    return children => <Provider value={state[type]}>{children}</Provider>
+    return children => createElement(Provider,{value:state[type]},children); 
+    // <Provider value={state[type]}>{children}</Provider>
   }
 
   const reposArr = Array.from(repos).map(repo => renderTmp(repo));

@@ -1,6 +1,6 @@
-import React, { useContext, useMemo, useState } from 'react'
+import React, {  useState } from 'react'
 // import Test from './components/test';
-import {StateWrapper,detailCtrl} from './components/multiContext';
+import {StateWrapper,detailCtrl} from './components/flowRegime';
 import './App.css'
 
 function Grandpa() {;
