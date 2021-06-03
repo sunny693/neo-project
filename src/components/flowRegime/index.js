@@ -1,5 +1,5 @@
-import { createElement, createContext, useReducer, useContext, useMemo,} from 'react';
-import { isType, variableRelation, compose,isEqual } from './util';
+import { createElement, createContext, useReducer, useContext,} from 'react';
+import { isType, variableRelation, compose, } from './util';
 
 let ctrlState;
 const SingleContextType = Symbol("A separate context type.");
@@ -64,7 +64,6 @@ function StateWrapper({ children }) {
     const { Provider } = store;
 
     return children => createElement(Provider,{value:state[type]},children); 
-    // <Provider value={state[type]}>{children}</Provider>
   }
 
   const reposArr = Array.from(repos).map(repo => renderTmp(repo));
@@ -73,4 +72,7 @@ function StateWrapper({ children }) {
   return children;
 }
 
-export { StateWrapper, ctrlState, };
+export { 
+  StateWrapper, 
+  ctrlState, 
+};

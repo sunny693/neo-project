@@ -147,7 +147,10 @@ function isEqual(...rest) {
 
 function compose(...rest) {
   if (rest.length === 0) return;
-  if (rest.length === 1) return rest[0]();
+  if (rest.length === 1){
+    const fnc = rest[0];
+    return isType(fnc,'function') ? fnc() : undefined;
+  }
 
   const params = rest.pop();
   const funcs = rest;

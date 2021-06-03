@@ -1,14 +1,12 @@
 import React, {  useState } from 'react'
-// import Test from './components/test';
 import {StateWrapper,ctrlState} from './components/flowRegime';
-import './App.css'
-import { compose } from './components/util';
+import './App.css';
 
 function Grandpa() {;
   const [k,setK] = useState(1);
   return <StateWrapper>
     {
-      forEach(1000)
+      forEach(100)
     }
     { k !== 1 &&  <Father2/>}
     <Father3 k={k} setK={setK}/>
