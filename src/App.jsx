@@ -1,12 +1,12 @@
 import React, {  useState } from 'react'
-import {StateWrapper,ctrlState} from './components/flowRegime';
+import flowRegime from './components/flowRegime';
 import './App.css';
-
+const {StateWrapper,useCtrlState} = flowRegime;
 function Grandpa() {;
   const [k,setK] = useState(1);
   return <StateWrapper>
     {
-      forEach(100)
+      forEach(1000)
     }
     { k !== 1 &&  <Father2/>}
     <Father3 k={k} setK={setK}/>
@@ -24,21 +24,21 @@ function forEach(num){
 };
 
 function Father1({val}) {
-  const  [state,dispatch]= ctrlState(`MULTI-SIGN-${val}`);
+  const  [state,dispatch]= useCtrlState(`MULTI-SIGN-${val}`,{a:6});
 
   return <div onClick={() => {
     dispatch({
-      a: state?.a ? state.a+1 : 1
+      a: state.a+1
     });
   }}>
     {state?.a}
-    {/* <Child1 /> */}
+    <Child1 />
     因为有你
   </div>;
 }
 
 function Father2(props) {
-  const [state,dispatch] = ctrlState('SIGN2');
+  const [state,dispatch] = useCtrlState('SIGN2');
 
   return <><div onClick={() => {
     dispatch({
@@ -57,9 +57,9 @@ function Father2(props) {
 }
 
 function Child1(props) {
-  const [state] = ctrlState('SIGN2');
+  const [state] = useCtrlState('MULTI-SIGN-1');
   return <div>
-    {state?.b }
+    {state?.a }
   </div>
 }
 
